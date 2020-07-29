@@ -4,6 +4,10 @@ public class Account {
 	
 	private String userId;
 	private String password;
+	
+	public Account() {
+		
+	}
 
 	public Account(String userId, String password) {
 		super();

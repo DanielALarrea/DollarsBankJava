@@ -7,6 +7,10 @@ public class Customer {
 	private int contactNum;
 	private Account bankAccount;
 	
+	public Customer() {
+		
+	}
+	
 	public Customer(String name, String address, int contactNum, Account bankAccount) {
 		super();
 		this.name = name;
@@ -45,6 +49,12 @@ public class Customer {
 
 	public void setBankAccount(Account bankAccount) {
 		this.bankAccount = bankAccount;
+	}
+
+	@Override
+	public String toString() {
+		return "Customer [name=" + name + ", address=" + address + ", contactNum=" + contactNum + ", bankAccount="
+				+ bankAccount + "]";
 	}
 	
 	

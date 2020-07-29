@@ -80,25 +80,39 @@ public class ConsolePrinterUtility {
 		return "Balance - " + savings.getSavings() + " as of " + LocalDateTime.now();
 	}
 	
-	public String printDepositTransaction(int deposit) {
+	public String printDepositTransaction(float deposit) {
 		return "Deposited " + deposit;
 	}
 	
-	public String printWithdrawTransaction(int withdraw) {
+	public String printWithdrawTransaction(float withdraw) {
 		return "Withdrew " + withdraw;
 	}
 	
-	public String printTransferTransaction(int transfer, String user1, String user2) {
-		return "User " + user1 + " transfered " + transfer + " to User " + user2;
+	public String printAccountCreation(String userId) {
+		return "Account creation for account [" + userId + "]";
 	}
 	
-	public void printCustomerInformation(Customer placeholder) {
-		// Look into this later, and do it properly
-		SavingsAccount savingsAcc = (SavingsAccount) placeholder.getBankAccount();
-		System.out.println("Name: " + placeholder.getName());
-		System.out.println("Address: " + placeholder.getAddress());
-		System.out.println("Contact Number: " + placeholder.getContactNum());
-		System.out.println("User ID: " + placeholder.getBankAccount().getUserId());
+	public String printGiveTransferTransaction(float transfer, String user1, String user2) {
+		return "User [" + user1 + "] transfered " + transfer + " to User [" + user2 + "]";
+	}
+	
+	public String printReceiveTransferTransaction(float transfer, String user1, String user2) {
+		return "User [" + user1 + "] receieved " + transfer + " from User [" + user2 + "]";
+	}
+	
+	public void printCustomerInformation(Customer customer) {
+		// Look into this later, and do it properly???
+		SavingsAccount savingsAcc = (SavingsAccount) customer.getBankAccount();
+		System.out.println("Name: " + customer.getName());
+		System.out.println("Address: " + customer.getAddress());
+		System.out.println("Contact Number: " + customer.getContactNum());
+		System.out.println("User ID: " + savingsAcc.getUserId());
 		System.out.println("Balance: " + savingsAcc.getSavings());
+	}
+	
+	public void printRecentTransactions(SavingsAccount savings) {
+		for(String transaction: savings.getRecentTransactions()) {
+			System.out.println(transaction + "/n");
+		}
 	}
 }

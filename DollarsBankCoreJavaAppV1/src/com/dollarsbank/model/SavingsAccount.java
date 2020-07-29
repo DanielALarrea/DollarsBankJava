@@ -4,19 +4,19 @@ import java.util.List;
 
 public class SavingsAccount extends Account {
 	
-	private int savings;
+	private float savings;
 	private List<String> recentTransactions;
 
-	public SavingsAccount(String userId, String password, int savings) {
+	public SavingsAccount(String userId, String password, float savings) {
 		super(userId, password);
 		this.savings = savings;
 	}
 
-	public int getSavings() {
+	public float getSavings() {
 		return savings;
 	}
 
-	public void setSavings(int savings) {
+	public void setSavings(float savings) {
 		this.savings = savings;
 	}
 	
@@ -28,11 +28,11 @@ public class SavingsAccount extends Account {
 		this.recentTransactions = recentTransactions;
 	}
 	
-	public void deposit(int deposit) {
+	public void deposit(float deposit) {
 		this.savings += deposit;
 	}
 	
-	public void withdraw(int withdraw) {
+	public void withdraw(float withdraw) {
 		this.savings -= withdraw;
 	}
 
@@ -51,5 +51,12 @@ public class SavingsAccount extends Account {
 			popLeastRecentTransaction();
 		}
 	}
+
+	@Override
+	public String toString() {
+		return "SavingsAccount [userid=" + super.getUserId() + ", password=" + super.getPassword() + ", savings=" + savings + "]";
+	}
+	
+	
 	
 }
