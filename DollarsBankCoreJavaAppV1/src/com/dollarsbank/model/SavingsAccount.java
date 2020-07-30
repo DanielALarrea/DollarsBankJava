@@ -6,6 +6,14 @@ public class SavingsAccount extends Account {
 	
 	private float savings;
 	private List<String> recentTransactions;
+	
+	public SavingsAccount() {
+		
+	}
+	
+	public SavingsAccount(String userId, String password) {
+		super(userId, password);
+	}
 
 	public SavingsAccount(String userId, String password, float savings) {
 		super(userId, password);

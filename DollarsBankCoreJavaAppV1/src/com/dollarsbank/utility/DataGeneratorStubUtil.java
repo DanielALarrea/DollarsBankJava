@@ -9,14 +9,14 @@ import com.dollarsbank.model.SavingsAccount;
 
 public class DataGeneratorStubUtil {
 	
-	public List<Customer> customerList = new ArrayList<Customer>();
+	public static List<Customer> customerList = new ArrayList<Customer>();
 	
-	public void createAccount(String name, String address, int contactNum, String userId, String password, float initDeposit) {
+	public static void createAccount(String name, String address, int contactNum, String userId, String password, float initDeposit) {
 		//System.out.println(name + ", " + address + ", " + contactNum + ", " + userId + ", " + password + ", " + initDeposit);
 		customerList.add(new Customer(name, address, contactNum, new SavingsAccount(userId, password, initDeposit)));
 	}
 	
-	public void createAccount(Customer customer) {
+	public static void createAccount(Customer customer) {
 		customerList.add(customer);
 	}
 

@@ -8,13 +8,32 @@ import com.dollarsbank.model.Account;
 import com.dollarsbank.model.Customer;
 import com.dollarsbank.model.SavingsAccount;
 import com.dollarsbank.controller.DollarsBankController;
+import com.dollarsbank.utility.ColorsUtility;
 import com.dollarsbank.utility.ConsolePrinterUtility;
 import com.dollarsbank.utility.DataGeneratorStubUtil;
 
 public class DollarsBankApplication {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		/* TODO
+		 * 
+		 *  Recent Transactions
+		 *  -Store Transactions
+		 *  -Print Transactions
+		 *  
+		 *  Password Validation
+		 *  -Password contains the specified reqs: 8 characters with a Lowercase, an Uppercase, and a Special character
+		 *  
+		 *  User ID Validation
+		 *  -Check that no User ID matches
+		 *  
+		 *  Withdrawal Validation
+		 *  -Check that user is not withdrawing more than they have in savings.
+		 *  
+		 *  Input Validation in general - Making sure incorrect inputs are handled
+		 *  -Letters for numbers mostly
+		 *  
+		*/
 		//runTests();
 		runMenu();
 	}
@@ -53,37 +72,34 @@ public class DollarsBankApplication {
 //		data.createAccount(customerTest2.getName(), customerTest2.getAddress(), customerTest2.getContactNum(), 
 //				savingsTest2.getUserId(), savingsTest2.getPassword(), savingsTest2.getSavings());
 		
-		data.createAccount(customerTest);
-		data.createAccount(customerTest2);
+		DataGeneratorStubUtil.createAccount(customerTest);
+		DataGeneratorStubUtil.createAccount(customerTest2);
 		
-		for(Customer cu: data.customerList) {
+		for(Customer cu: DataGeneratorStubUtil.customerList) {
 			System.out.println(cu);
 		}
 		
 		DollarsBankController.transferFunds(savingsTest, savingsTest2, 200.0f);
 		
-		for(Customer cu: data.customerList) {
+		for(Customer cu: DataGeneratorStubUtil.customerList) {
 			System.out.println(cu);
 		}
 		
 		DollarsBankController.transferFunds((SavingsAccount) customerTest.getBankAccount(), (SavingsAccount) customerTest2.getBankAccount(), 200.0f);
 		
-		for(Customer cu: data.customerList) {
+		for(Customer cu: DataGeneratorStubUtil.customerList) {
 			System.out.println(cu);
 		}
 		
-		boolean validLogin = appControl.validLogin("user3", "pass3", data);
+		boolean validLogin = appControl.validLogin("user3", "pass3");
 		System.out.println(validLogin);
 		
-		Customer retrievedCustomer = appControl.retrieveCustomerFromAccount(savingsTest, data);
+		Customer retrievedCustomer = appControl.retrieveCustomerFromAccount(savingsTest);
 		System.out.println(retrievedCustomer);
 		
 	}
 	
 	public static void runMenu() {
-		DataGeneratorStubUtil data = new DataGeneratorStubUtil();
-		ConsolePrinterUtility console = new ConsolePrinterUtility();
-		DollarsBankController control = new DollarsBankController();
 		boolean loggedIn = false;
 		
 		Scanner scan = new Scanner(System.in);
@@ -94,46 +110,92 @@ public class DollarsBankApplication {
 		String userInput = "";
 		String passInput = "";
 		float moneyInput = 0.0f;
-		SavingsAccount currentAccount = null;
+		Account currentAccount = new Account();
+//		Account currentAccount = new SavingsAccount();
+//		SavingsAccount currentAccountAsSavings = (SavingsAccount) currentAccount;
+//		SavingsAccount currentAccount = new SavingsAccount();
 		
 		while(true) {
 			if (!loggedIn) {
-				console.printWelcomeHeader();
-				console.printWelcomeMenu();
+				ConsolePrinterUtility.printWelcomeHeader();
+				ConsolePrinterUtility.printWelcomeMenu();
+				// Option 11: Welcome Menu Select
+				ConsolePrinterUtility.printInputOption(11);
 				menuInput = scan.next();
 				switch (menuInput) {
 				case "1":
-					console.printCreateAccountHeader();
-					System.out.println("Customer Name:");
+					ConsolePrinterUtility.printCreateAccountHeader();
+					
+					// Option 0: Customer Name:
+					ConsolePrinterUtility.printInputOption(0);
+					
+					ColorsUtility.startColorText(32);
 					nameInput = scan.next();
-					System.out.println("Customer Address:");
+					ColorsUtility.endColorText();
+					
+					// Option 1: Customer Address:
+					ConsolePrinterUtility.printInputOption(1);
+					
+					ColorsUtility.startColorText(32);
 					addressInput = scan.next();
-					System.out.println("Customer Contact Number:");
+					ColorsUtility.endColorText();
+					
+					// Option 2: Customer Contact Number:
+					ConsolePrinterUtility.printInputOption(2);
+					
+					ColorsUtility.startColorText(32);
 					contactNumInput = scan.nextInt();
-					System.out.println("User ID:");
+					ColorsUtility.endColorText();
+					
+					// Option 3: User ID:
+					ConsolePrinterUtility.printInputOption(3);
+					
+					ColorsUtility.startColorText(32);
 					userInput = scan.next();
-					System.out.println("Password: 8 Characters with Lower, Upper, and Special");
+					ColorsUtility.endColorText();
+					
+					// Option 4: Password: 8 Characters with Lower, Upper, and Special
+					ConsolePrinterUtility.printInputOption(4);
+					
+					ColorsUtility.startColorText(32);
 					passInput = scan.next();
-					System.out.println("Initial Deposit Amount");
+					ColorsUtility.endColorText();
+					
+					// Option 5: Initial Deposit Amount
+					ConsolePrinterUtility.printInputOption(5);
+					
+					ColorsUtility.startColorText(32);
 					moneyInput = scan.nextFloat();
-					data.createAccount(nameInput, addressInput, contactNumInput, userInput, passInput, moneyInput);
-					System.out.println(data.customerList);
+					ColorsUtility.endColorText();
+					
+					DataGeneratorStubUtil.createAccount(nameInput, addressInput, contactNumInput, userInput, passInput, moneyInput);
+					System.out.println(DataGeneratorStubUtil.customerList);
 					break;
 				case "2":
-					console.printLogInHeader();
-					System.out.println("User ID:");
+					ConsolePrinterUtility.printLogInHeader();
+					
+					// Option 3: User ID:
+					ConsolePrinterUtility.printInputOption(3);
+					
+					ColorsUtility.startColorText(32);
 					userInput = scan.next();
-					System.out.println("Password:");
+					ColorsUtility.endColorText();
+					
+					// Option 6: Password:
+					ConsolePrinterUtility.printInputOption(6);
+					
+					ColorsUtility.startColorText(32);
 					passInput = scan.next();
-					if(control.validLogin(userInput, passInput, data)) {
-						//currentAccount = control.retrieveAccountFromUserAndPass(userInput, passInput, data);
+					ColorsUtility.endColorText();
+					if(DollarsBankController.validLogin(userInput, passInput)) {
+						currentAccount = DollarsBankController.retrieveAccountFromUserAndPass(userInput, passInput);
 						loggedIn = true;
 					} else {
-						System.out.println("Invalid login. Try again");
+						ConsolePrinterUtility.printInputErrorMessage(0);
 					}
 					break;
 				case "3":
-					System.out.println("Exiting menu...");
+					ConsolePrinterUtility.printExitHeader();
 					scan.close();
 					System.exit(0);
 					break;
@@ -142,33 +204,61 @@ public class DollarsBankApplication {
 					break;
 				}
 			} else {
-				console.printSignedInHeader();
-				console.printSignedInMenu();
+				ConsolePrinterUtility.printSignedInHeader();
+				ConsolePrinterUtility.printSignedInMenu();
+				// Option 12: Signed In Menu Select
+				ConsolePrinterUtility.printInputOption(12);
 				menuInput = scan.next();
 				switch (menuInput) {
 				case "1":
-					console.printDepositHeader();
-					System.out.println("Enter an amount to deposit:");
+					ConsolePrinterUtility.printDepositHeader();
+					// Option 7: Enter Deposit Amount
+					ConsolePrinterUtility.printInputOption(7);
 					moneyInput = scan.nextFloat();
-					DollarsBankController.depositAmount(currentAccount, moneyInput);
+					DollarsBankController.depositAmount((SavingsAccount) currentAccount, moneyInput);
 					break;
 				case "2":
-					console.printWithdrawHeader();
+					ConsolePrinterUtility.printWithdrawHeader();
+					// Option 8: Enter Withdraw Amount
+					ConsolePrinterUtility.printInputOption(8);
+					moneyInput = scan.nextFloat();
+					if(DollarsBankController.validWithdraw((SavingsAccount) currentAccount, moneyInput)) {
+						System.out.println("Valid withdraw");
+						DollarsBankController.withdrawAmount((SavingsAccount) currentAccount, moneyInput);
+					} else {
+						ConsolePrinterUtility.printInputErrorMessage(5);
+					}
+					
 					break;
 				case "3":
-					console.printFundTransferHeader();
+					ConsolePrinterUtility.printFundTransferHeader();
+					// Option 9: Enter User ID to Transfer to
+					ConsolePrinterUtility.printInputOption(9);
+					userInput = scan.next();
+					// Option 10: Enter Transfer Amount
+					ConsolePrinterUtility.printInputOption(10);
+					moneyInput = scan.nextFloat();
+					if(DollarsBankController.validWithdraw((SavingsAccount) currentAccount, moneyInput)) {
+						System.out.println("Valid transfer");
+						DollarsBankController.transferFunds((SavingsAccount) currentAccount, 
+								(SavingsAccount) DollarsBankController.retrieveAccountFromUser(userInput), moneyInput);
+					} else {
+						ConsolePrinterUtility.printInputErrorMessage(5);
+					}
 					break;
 				case "4":
-					console.printRecentTransactionHeader();
+					ConsolePrinterUtility.printRecentTransactionHeader();
 					break;
 				case "5":
-					console.printCustomerInfoHeader();
+					ConsolePrinterUtility.printCustomerInfoHeader();
+					ConsolePrinterUtility.printCustomerInformation(DollarsBankController.retrieveCustomerFromAccount(currentAccount));
 					break;
 				case "6":
 					loggedIn = false;
 					break;
 				case "7":
-					System.out.println("Balance:" + currentAccount.getSavings());
+					System.out.println(currentAccount);
+//					System.out.println("Balance:" + ((SavingsAccount) currentAccount).getSavings());
 					break;
 				default:
 					System.out.println("Invalid input, please enter a valid input");

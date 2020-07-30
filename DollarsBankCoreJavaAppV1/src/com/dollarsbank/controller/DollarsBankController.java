@@ -42,9 +42,9 @@ public class DollarsBankController {
 		savingsTo.deposit(amount);
 	}
 	
-	public Customer retrieveCustomerFromAccount(Account account, DataGeneratorStubUtil data) {
+	public static Customer retrieveCustomerFromAccount(Account account) {
 		Customer customer = new Customer();
-		for (Customer cu: data.customerList) {
+		for (Customer cu: DataGeneratorStubUtil.customerList) {
 			if (cu.getBankAccount() == account) {
 				customer = cu;
 			}
@@ -53,10 +53,10 @@ public class DollarsBankController {
 		return customer;
 	}
 	
-	public Account retrieveAccountFromUserAndPass(String user, String pass,  DataGeneratorStubUtil data) {
-		Account account = new Account(user, pass);
-		for (Customer cu: data.customerList) {
-			if (cu.getBankAccount() == account) {
+	public static Account retrieveAccountFromUserAndPass(String user, String pass) {
+		Account account = new Account();
+		for (Customer cu: DataGeneratorStubUtil.customerList) {
+			if (user.equals(cu.getBankAccount().getUserId()) && pass.equals(cu.getBankAccount().getPassword())) {	
 				account = cu.getBankAccount();
 			}
 		}
@@ -64,9 +64,26 @@ public class DollarsBankController {
 		return account;
 	}
 	
-	public boolean validLogin(String user, String pass, DataGeneratorStubUtil data) {
+	public static Account retrieveAccountFromUser(String user) {
+		Account account = new Account();
+		for (Customer cu: DataGeneratorStubUtil.customerList) {
+			if (user.equals(cu.getBankAccount().getUserId())) {	
+				account = cu.getBankAccount();
+			}
+		}
+		
+		return account;
+	}
+	
+	public static boolean uniqueUserId() {
+		boolean isUnique = false;
+		
+		return isUnique;
+	}
+	
+	public static boolean validLogin(String user, String pass) {
 		boolean validLogin = false;
-		for (Customer cu: data.customerList) {
+		for (Customer cu: DataGeneratorStubUtil.customerList) {
 			if (user.equals(cu.getBankAccount().getUserId()) && pass.equals(cu.getBankAccount().getPassword())) {
 				System.out.println("Valid login");
 				validLogin = true;
@@ -76,7 +93,7 @@ public class DollarsBankController {
 		return validLogin;
 	}
 	
-	public boolean validWithdraw(SavingsAccount savings, float withdraw) {
+	public static boolean validWithdraw(SavingsAccount savings, float withdraw) {
 		boolean valid = false;
 		if (withdraw <= savings.getSavings()) {
 			valid = true;
