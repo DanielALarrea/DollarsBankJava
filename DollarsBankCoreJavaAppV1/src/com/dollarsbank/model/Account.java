@@ -30,6 +30,10 @@ public class Account {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "Account [userId=" + userId + ", password=" + password + "]";
+	}
 	
 }

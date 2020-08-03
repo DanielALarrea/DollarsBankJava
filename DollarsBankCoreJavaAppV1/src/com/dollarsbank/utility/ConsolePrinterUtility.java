@@ -7,72 +7,84 @@ import com.dollarsbank.model.SavingsAccount;
 
 public class ConsolePrinterUtility {
 	
+	// Print the header for the initial screen
 	public static void printWelcomeHeader() {
 		ColorsUtility.printBlue("+---------------------------+");
 		ColorsUtility.printBlue("| DOLLARSBANK Welcomes You! |");
 		ColorsUtility.printBlue("+---------------------------+");
 	}
 	
+	// Print the header for the signed in menu
 	public static void printSignedInHeader() {
 		ColorsUtility.printBlue("+---------------------+");
 		ColorsUtility.printBlue("| WELCOME Customer!!! |");
 		ColorsUtility.printBlue("+---------------------+");
 	}
 	
+	// Print the header for creating an account
 	public static void printCreateAccountHeader() {
 		ColorsUtility.printBlue("+-------------------------------+");
 		ColorsUtility.printBlue("| Enter Details For New Account |");
 		ColorsUtility.printBlue("+-------------------------------+");
 	}
 	
+	// Print the header for customer log in
 	public static void printLogInHeader() {
 		ColorsUtility.printBlue("+---------------------+");
 		ColorsUtility.printBlue("| Enter Login Details |");
 		ColorsUtility.printBlue("+---------------------+");
 	}
 	
+	// Print the header for the deposit transaction
 	public static void printDepositHeader() {
 		ColorsUtility.printBlue("+--------------------+");
 		ColorsUtility.printBlue("| Deposit To Account |");
 		ColorsUtility.printBlue("+--------------------+");
 	}
 	
+	// Print the header for the withdraw transaction
 	public static void printWithdrawHeader() {
 		ColorsUtility.printBlue("+-----------------------+");
 		ColorsUtility.printBlue("| Withdraw From Account |");
 		ColorsUtility.printBlue("+-----------------------+");
 	}
 	
+	// Print the header for the funds transfer transaction
 	public static void printFundTransferHeader() {
 		ColorsUtility.printBlue("+----------------+");
 		ColorsUtility.printBlue("| Transfer Funds |");
 		ColorsUtility.printBlue("+----------------+");
 	}
 
+	// Print the header for the 5 recent transaction
 	public static void printRecentTransactionHeader() {
 		ColorsUtility.printBlue("+------------------------+");
 		ColorsUtility.printBlue("| 5 Recent Transactions: |");
 		ColorsUtility.printBlue("+------------------------+");
 	}
 	
+	// Print the header for displaying customer information
 	public static void printCustomerInfoHeader() {
 		ColorsUtility.printBlue("+-----------------------+");
 		ColorsUtility.printBlue("| Customer Information: |");
 		ColorsUtility.printBlue("+-----------------------+");
 	}
 	
+	// Print the header for exiting the program
 	public static void printExitHeader() {
 		ColorsUtility.printBlue("+----------------------------------+");
 		ColorsUtility.printBlue("| Thank You For Using DOLLARSBANK! |");
 		ColorsUtility.printBlue("+----------------------------------+");
 	}
 	
+	// Print the menu options for the initial menu
 	public static void printWelcomeMenu() {
 		System.out.println("1. Create New Account");
 		System.out.println("2. Login");
 		System.out.println("3. Exit");
 	}
 	
+	// Print the menu options for the signed in menu
 	public static void printSignedInMenu() {
 		System.out.println("1. Deposit Amount");
 		System.out.println("2. Withdraw Amount");
@@ -82,6 +94,7 @@ public class ConsolePrinterUtility {
 		System.out.println("6. Sign Out");
 	}
 	
+	// Display an input message
 	public static void printInputOption(int option) {
 		switch(option) {
 		case 0:
@@ -128,6 +141,7 @@ public class ConsolePrinterUtility {
 		}
 	}
 	
+	// Display an error message when the customer has given some incorrect input
 	public static void printInputErrorMessage(int option) {
 		switch(option) {
 		case 0:
@@ -185,8 +199,8 @@ public class ConsolePrinterUtility {
 		return "User [" + user1 + "] receieved " + transfer + " from User [" + user2 + "]";
 	}
 	
+	// Print customer information(not password of course)
 	public static void printCustomerInformation(Customer customer) {
-		// Look into this later, and do it properly???
 		SavingsAccount savingsAcc = (SavingsAccount) customer.getBankAccount();
 		System.out.println("Name: " + customer.getName());
 		System.out.println("Address: " + customer.getAddress());
@@ -195,9 +209,10 @@ public class ConsolePrinterUtility {
 		System.out.println("Balance: " + savingsAcc.getSavings());
 	}
 	
+	// Print an Account's recent transactions
 	public static void printRecentTransactions(SavingsAccount savings) {
-		for(String transaction: savings.getRecentTransactions()) {
-			System.out.println(transaction + "/n");
+		for(String transaction: savings.xMostRecentTransaction(5)) {
+			System.out.println(transaction);
 		}
 	}
 }

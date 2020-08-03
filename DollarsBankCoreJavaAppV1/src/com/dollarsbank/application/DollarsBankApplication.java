@@ -16,22 +16,12 @@ public class DollarsBankApplication {
 
 	public static void main(String[] args) {
 		/* TODO
-		 * 
-		 *  Recent Transactions
-		 *  -Store Transactions
-		 *  -Print Transactions
-		 *  
-		 *  Password Validation
-		 *  -Password contains the specified reqs: 8 characters with a Lowercase, an Uppercase, and a Special character
-		 *  
-		 *  User ID Validation
-		 *  -Check that no User ID matches
-		 *  
-		 *  Withdrawal Validation
-		 *  -Check that user is not withdrawing more than they have in savings.
 		 *  
 		 *  Input Validation in general - Making sure incorrect inputs are handled
 		 *  -Letters for numbers mostly
+		 *  
+		 *  Transfer Funds User validation
+		 *  -Check that User ID is distinct as well
 		 *  
 		*/
 		//runTests();
@@ -111,9 +101,16 @@ public class DollarsBankApplication {
 		String passInput = "";
 		float moneyInput = 0.0f;
 		Account currentAccount = new Account();
-//		Account currentAccount = new SavingsAccount();
-//		SavingsAccount currentAccountAsSavings = (SavingsAccount) currentAccount;
-//		SavingsAccount currentAccount = new SavingsAccount();
+		//SavingsAccount currentAccountAsSavings = (SavingsAccount) currentAccount;
+		SavingsAccount otherAccount = new SavingsAccount();
+		SavingsAccount newSavings = new SavingsAccount();
+		String transaction = "";
+		
+		Customer testCustomer = new Customer("Name", "Address", 1234567890, new SavingsAccount("U01", "Pass", 500));
+		DataGeneratorStubUtil.createAccount(testCustomer);
+		
+		Customer testCustomer2 = new Customer("Name", "Address", 1234567890, new SavingsAccount("U02", "Pass2", 300));
+		DataGeneratorStubUtil.createAccount(testCustomer2);
 		
 		while(true) {
 			if (!loggedIn) {
@@ -167,8 +164,19 @@ public class DollarsBankApplication {
 					ColorsUtility.startColorText(32);
 					moneyInput = scan.nextFloat();
 					ColorsUtility.endColorText();
-					
-					DataGeneratorStubUtil.createAccount(nameInput, addressInput, contactNumInput, userInput, passInput, moneyInput);
+					if (!DollarsBankController.uniqueUserId(userInput)) {
+						// Error 1: Non-unique UserID
+						ConsolePrinterUtility.printInputErrorMessage(1);
+					} else if (!DollarsBankController.matchesPasswordCriteria(passInput)) {
+						// Error 2: Password does not fit criteria
+						ConsolePrinterUtility.printInputErrorMessage(2);
+					} else {
+						newSavings = new SavingsAccount(userInput, passInput, moneyInput);
+						transaction = ConsolePrinterUtility.printAccountCreation(newSavings.getUserId()) + "\n"
+									+ ConsolePrinterUtility.printCurrentBalanceAndTime(newSavings);
+						DollarsBankController.pushTransaction(newSavings, transaction);
+						DataGeneratorStubUtil.createAccount(nameInput, addressInput, contactNumInput, newSavings);
+					}
 					System.out.println(DataGeneratorStubUtil.customerList);
 					break;
 				case "2":
@@ -191,6 +199,7 @@ public class DollarsBankApplication {
 						currentAccount = DollarsBankController.retrieveAccountFromUserAndPass(userInput, passInput);
 						loggedIn = true;
 					} else {
+						// Error 0: Invalid credentials
 						ConsolePrinterUtility.printInputErrorMessage(0);
 					}
 					break;
@@ -216,6 +225,9 @@ public class DollarsBankApplication {
 					ConsolePrinterUtility.printInputOption(7);
 					moneyInput = scan.nextFloat();
 					DollarsBankController.depositAmount((SavingsAccount) currentAccount, moneyInput);
+					transaction = ConsolePrinterUtility.printDepositTransaction(moneyInput) + "\n" 
+								+ ConsolePrinterUtility.printCurrentBalanceAndTime((SavingsAccount) currentAccount);
+					DollarsBankController.pushTransaction((SavingsAccount) currentAccount, transaction);
 					break;
 				case "2":
 					ConsolePrinterUtility.printWithdrawHeader();
@@ -225,7 +237,11 @@ public class DollarsBankApplication {
 					if(DollarsBankController.validWithdraw((SavingsAccount) currentAccount, moneyInput)) {
 						System.out.println("Valid withdraw");
 						DollarsBankController.withdrawAmount((SavingsAccount) currentAccount, moneyInput);
+						transaction = ConsolePrinterUtility.printWithdrawTransaction(moneyInput) + "\n" 
+								+ ConsolePrinterUtility.printCurrentBalanceAndTime((SavingsAccount) currentAccount);
+						DollarsBankController.pushTransaction((SavingsAccount) currentAccount, transaction);
 					} else {
+						// Error 5: Not Enough Funds
 						ConsolePrinterUtility.printInputErrorMessage(5);
 					}
 					
@@ -238,16 +254,32 @@ public class DollarsBankApplication {
 					// Option 10: Enter Transfer Amount
 					ConsolePrinterUtility.printInputOption(10);
 					moneyInput = scan.nextFloat();
-					if(DollarsBankController.validWithdraw((SavingsAccount) currentAccount, moneyInput)) {
-						System.out.println("Valid transfer");
-						DollarsBankController.transferFunds((SavingsAccount) currentAccount, 
-								(SavingsAccount) DollarsBankController.retrieveAccountFromUser(userInput), moneyInput);
+					if(DollarsBankController.userExists(userInput)) {
+						if(DollarsBankController.validWithdraw((SavingsAccount) currentAccount, moneyInput)) {
+							otherAccount = (SavingsAccount) DollarsBankController.retrieveAccountFromUser(userInput);
+							System.out.println("Valid transfer");
+							DollarsBankController.transferFunds((SavingsAccount) currentAccount, otherAccount, moneyInput);
+
+							transaction = ConsolePrinterUtility.printGiveTransferTransaction(moneyInput, currentAccount.getUserId(), otherAccount.getUserId()) + "\n" 
+									+ ConsolePrinterUtility.printCurrentBalanceAndTime((SavingsAccount) currentAccount);
+							DollarsBankController.pushTransaction((SavingsAccount) currentAccount, transaction);
+
+							transaction = ConsolePrinterUtility.printReceiveTransferTransaction(moneyInput, otherAccount.getUserId(), currentAccount.getUserId()) + "\n" 
+									+ ConsolePrinterUtility.printCurrentBalanceAndTime(otherAccount);
+							DollarsBankController.pushTransaction(otherAccount, transaction);
+						} else {
+							// Error 5: Not Enough Funds
+							ConsolePrinterUtility.printInputErrorMessage(5);
+						}
+						
 					} else {
-						ConsolePrinterUtility.printInputErrorMessage(5);
+						// Error 6: User does not exist
+						ConsolePrinterUtility.printInputErrorMessage(6);
 					}
 					break;
 				case "4":
 					ConsolePrinterUtility.printRecentTransactionHeader();
+					ConsolePrinterUtility.printRecentTransactions((SavingsAccount) currentAccount);
 					break;
 				case "5":
 					ConsolePrinterUtility.printCustomerInfoHeader();

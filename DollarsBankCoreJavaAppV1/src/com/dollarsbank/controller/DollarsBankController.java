@@ -6,42 +6,28 @@ import com.dollarsbank.model.SavingsAccount;
 import com.dollarsbank.utility.DataGeneratorStubUtil;
 
 public class DollarsBankController {
-//	DataGeneratorStubUtil data = new DataGeneratorStubUtil();
 	
-//	public void depositAmount(Customer customer, float deposit) {
-//		SavingsAccount savings = (SavingsAccount) customer.getBankAccount();
-//		savings.deposit(deposit);
-//		customer.setBankAccount(savings);
-//	}
-//	
-//	public void withdrawAmount(Customer customer, float withdraw) {
-//		SavingsAccount savings = (SavingsAccount) customer.getBankAccount();
-//		savings.withdraw(withdraw);
-//		customer.setBankAccount(savings);
-//	}
-//	
-//	public void transferFunds(Customer customerFrom, Customer customerTo, float amount) {
-//		SavingsAccount savingsFrom = (SavingsAccount) customerFrom.getBankAccount();
-//		SavingsAccount savingsTo = (SavingsAccount) customerTo.getBankAccount();
-//		savingsFrom.withdraw(amount);
-//		savingsTo.deposit(amount);
-//		customerFrom.setBankAccount(savingsFrom);
-//		customerTo.setBankAccount(savingsTo);
-//	}
-	
+	// Deposit savings to account
 	public static void depositAmount(SavingsAccount savings, float deposit) {
 		savings.deposit(deposit);
 	}
 	
+	// Withdraw savings from account
 	public static void withdrawAmount(SavingsAccount savings, float withdraw) {
 		savings.withdraw(withdraw);
 	}
 	
+	// Transfer funds from one account to another
 	public static void transferFunds(SavingsAccount savingsFrom, SavingsAccount savingsTo, float amount) {
 		savingsFrom.withdraw(amount);
 		savingsTo.deposit(amount);
 	}
 	
+	public static void pushTransaction(SavingsAccount savings, String transaction) {
+		savings.pushRecentTransaction(transaction);
+	}
+	
+	// Retrieve the customer associated with an Account
 	public static Customer retrieveCustomerFromAccount(Account account) {
 		Customer customer = new Customer();
 		for (Customer cu: DataGeneratorStubUtil.customerList) {
@@ -53,6 +39,7 @@ public class DollarsBankController {
 		return customer;
 	}
 	
+	// Retrieve the Account associated with a particular userID and password
 	public static Account retrieveAccountFromUserAndPass(String user, String pass) {
 		Account account = new Account();
 		for (Customer cu: DataGeneratorStubUtil.customerList) {
@@ -64,6 +51,7 @@ public class DollarsBankController {
 		return account;
 	}
 	
+	// With only the userID, retrieve the Account associated with it
 	public static Account retrieveAccountFromUser(String user) {
 		Account account = new Account();
 		for (Customer cu: DataGeneratorStubUtil.customerList) {
@@ -75,12 +63,41 @@ public class DollarsBankController {
 		return account;
 	}
 	
-	public static boolean uniqueUserId() {
-		boolean isUnique = false;
+	public static boolean userExists(String user) {
+		boolean exists = true;
+		Account userAccount = new Account();
+		if (DollarsBankController.retrieveAccountFromUser(user).getUserId() == null) {
+			exists = false;
+		}
+		return exists;
+	}
+	
+	// Ensure the customer's userID is unique to them
+	public static boolean uniqueUserId(String user) {
+		boolean isUnique = true;
+		for (Customer cu: DataGeneratorStubUtil.customerList) {
+			if (user.equals(cu.getBankAccount().getUserId())) {	
+				isUnique = false;
+			}
+		}
 		
 		return isUnique;
 	}
 	
+	// Criteria: At least 8 characters in length, 1 Lowercase character, 1 Uppercase character, 1 Special character
+	public static boolean matchesPasswordCriteria(String password) {
+		boolean matchesCriteria = true;
+		if (password.length() != 8 
+		|| password.equals(password.toLowerCase()) 
+		|| password.equals(password.toUpperCase()) 
+		|| password.matches("[A-Za-z0-9 ]*")) {
+			matchesCriteria = false;
+		}
+		
+		return matchesCriteria;
+	}
+	
+	// Check that the customer's user and password are in the database
 	public static boolean validLogin(String user, String pass) {
 		boolean validLogin = false;
 		for (Customer cu: DataGeneratorStubUtil.customerList) {
@@ -93,6 +110,7 @@ public class DollarsBankController {
 		return validLogin;
 	}
 	
+	// Check that the customer is not trying to withdraw more than they have
 	public static boolean validWithdraw(SavingsAccount savings, float withdraw) {
 		boolean valid = false;
 		if (withdraw <= savings.getSavings()) {
@@ -101,4 +119,5 @@ public class DollarsBankController {
 		
 		return valid;
 	}
+
 }
