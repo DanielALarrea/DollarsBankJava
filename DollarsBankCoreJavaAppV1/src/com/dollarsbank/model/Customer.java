@@ -4,14 +4,14 @@ public class Customer {
 	
 	private String name;
 	private String address;
-	private int contactNum;
+	private String contactNum;
 	private Account bankAccount;
 	
 	public Customer() {
 		
 	}
 	
-	public Customer(String name, String address, int contactNum, Account bankAccount) {
+	public Customer(String name, String address, String contactNum, Account bankAccount) {
 		super();
 		this.name = name;
 		this.address = address;
@@ -35,11 +35,11 @@ public class Customer {
 		this.address = address;
 	}
 
-	public int getContactNum() {
+	public String getContactNum() {
 		return contactNum;
 	}
 
-	public void setContactNum(int contactNum) {
+	public void setContactNum(String contactNum) {
 		this.contactNum = contactNum;
 	}
 
@@ -56,7 +56,4 @@ public class Customer {
 		return "Customer [name=" + name + ", address=" + address + ", contactNum=" + contactNum + ", bankAccount="
 				+ bankAccount + "]";
 	}
-	
-	
-
 }

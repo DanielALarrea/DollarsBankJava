@@ -58,12 +58,6 @@ public class SavingsAccount extends Account {
 		this.recentTransactions.add(transaction);
 	}
 	
-//	public void xMostRecentTransaction(int x) {
-//		if (this.recentTransactions.size() > x) {
-//			popLeastRecentTransaction();
-//		}
-//	}
-	
 	public List<String> xMostRecentTransaction(int x) {
 		List<String> mostRecentTransactions = new ArrayList<String>();
 		int listLength = this.recentTransactions.size();

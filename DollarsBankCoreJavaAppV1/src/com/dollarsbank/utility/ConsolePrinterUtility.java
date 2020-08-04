@@ -1,6 +1,7 @@
 package com.dollarsbank.utility;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 import com.dollarsbank.model.Customer;
 import com.dollarsbank.model.SavingsAccount;
@@ -172,41 +173,91 @@ public class ConsolePrinterUtility {
 			// When user attempts to transfer to account that doesn't exist
 			ColorsUtility.printRed("User not found. Please ensure the user is correct!");
 			break;
+		case 7:
+			// When user attempts to transfer to themselves
+			ColorsUtility.printRed("You cannot transfer funds to yourself");
+			break;
+		case 8:
+			// When user is creating account and does not give a proper contact number
+			ColorsUtility.printRed("Invalid contact number");
+			break;
+		case 9:
+			// When user does not give desired menu input
+			ColorsUtility.printRed("Invalid input, please enter a valid input");
+			break;
 		}
 	}
 	
+	public static void printSuccessMessage(int option) {
+		switch(option) {
+		case 0:
+			// Successful account creation
+			ColorsUtility.printYellow("Account creation successful");
+			break;
+		case 1:
+			// Successful log in
+			ColorsUtility.printYellow("Log in successful");
+			break;
+		case 2:
+			// Successful deposit
+			ColorsUtility.printYellow("Funds deposited");
+			break;
+		case 3:
+			// Successful withdraw
+			ColorsUtility.printYellow("Funds withdrawn");
+			break;
+		case 4:
+			// Successful transfer
+			ColorsUtility.printYellow("Funds transferred");
+			break;
+		}
+	}
+	
+	// Added to every transaction
 	public static String printCurrentBalanceAndTime(SavingsAccount savings) {
-		return "Balance - " + savings.getSavings() + " as of " + LocalDateTime.now();
+		DateTimeFormatter dateFormat = DateTimeFormatter.RFC_1123_DATE_TIME;
+		ZonedDateTime timeOfTransaction = ZonedDateTime.now();
+		String formattedDateTime = timeOfTransaction.format(dateFormat);
+		return "Balance - " + ColorsUtility.turnGreen(Float.toString(savings.getSavings())) + " as of " + ColorsUtility.turnYellow(formattedDateTime);
 	}
 	
+	// Record deposit transaction
 	public static String printDepositTransaction(float deposit) {
-		return "Deposited " + deposit;
+		return "Deposited " +  ColorsUtility.turnGreen(Float.toString(deposit));
 	}
 	
+	// Record withdraw transaction
 	public static String printWithdrawTransaction(float withdraw) {
-		return "Withdrew " + withdraw;
+		return "Withdrew " +  ColorsUtility.turnGreen(Float.toString(withdraw));
 	}
 	
+	// Record account creation
 	public static String printAccountCreation(String userId) {
-		return "Account creation for account [" + userId + "]";
+		return "Account creation for account " + ColorsUtility.turnYellow("[" + userId + "]");
 	}
 	
+	// Record user1 transferring funds to user2
 	public static String printGiveTransferTransaction(float transfer, String user1, String user2) {
-		return "User [" + user1 + "] transfered " + transfer + " to User [" + user2 + "]";
+		return "User " + ColorsUtility.turnYellow("[" + user1 + "]")
+			+ " transferred " + ColorsUtility.turnGreen(Float.toString(transfer))
+			+ " to User " + ColorsUtility.turnYellow("[" + user2 + "]");
 	}
 	
+	// Record user1 receiving funds from user2
 	public static String printReceiveTransferTransaction(float transfer, String user1, String user2) {
-		return "User [" + user1 + "] receieved " + transfer + " from User [" + user2 + "]";
+		return "User " + ColorsUtility.turnYellow("[" + user1 + "]")
+			+ " receieved " + ColorsUtility.turnGreen(Float.toString(transfer)) 
+			+ " from User " + ColorsUtility.turnYellow("[" + user2 + "]");
 	}
 	
 	// Print customer information(not password of course)
 	public static void printCustomerInformation(Customer customer) {
 		SavingsAccount savingsAcc = (SavingsAccount) customer.getBankAccount();
-		System.out.println("Name: " + customer.getName());
-		System.out.println("Address: " + customer.getAddress());
-		System.out.println("Contact Number: " + customer.getContactNum());
-		System.out.println("User ID: " + savingsAcc.getUserId());
-		System.out.println("Balance: " + savingsAcc.getSavings());
+		System.out.println("Name: " + ColorsUtility.turnGreen(customer.getName()));
+		System.out.println("Address: " + ColorsUtility.turnGreen(customer.getAddress()));
+		System.out.println("Contact Number: " + ColorsUtility.turnGreen(customer.getContactNum()));
+		System.out.println("User ID: " + ColorsUtility.turnGreen(savingsAcc.getUserId()));
+		System.out.println("Balance: " + ColorsUtility.turnGreen(Float.toString(savingsAcc.getSavings())));
 	}
 	
 	// Print an Account's recent transactions

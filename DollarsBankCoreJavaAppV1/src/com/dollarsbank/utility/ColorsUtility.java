@@ -25,5 +25,21 @@ public class ColorsUtility {
 	public static void endColorText() {
 		System.out.print("\u001b[0m");
 	}
+	
+	public static String turnRed(String string) {
+		return "\u001b[31m" + string + "\u001b[0m";
+	}
+	
+	public static String turnGreen(String string) {
+		return "\u001b[32m" + string + "\u001b[0m";
+	}
+	
+	public static String turnYellow(String string) {
+		return "\u001b[33m" + string + "\u001b[0m";
+	}
+	
+	public static String turnBlue(String string) {
+		return "\u001b[34m" + string + "\u001b[0m";
+	}
 
 }

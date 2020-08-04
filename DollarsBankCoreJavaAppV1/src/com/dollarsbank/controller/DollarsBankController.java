@@ -65,7 +65,6 @@ public class DollarsBankController {
 	
 	public static boolean userExists(String user) {
 		boolean exists = true;
-		Account userAccount = new Account();
 		if (DollarsBankController.retrieveAccountFromUser(user).getUserId() == null) {
 			exists = false;
 		}
@@ -80,7 +79,6 @@ public class DollarsBankController {
 				isUnique = false;
 			}
 		}
-		
 		return isUnique;
 	}
 	
@@ -93,8 +91,44 @@ public class DollarsBankController {
 		|| password.matches("[A-Za-z0-9 ]*")) {
 			matchesCriteria = false;
 		}
-		
 		return matchesCriteria;
+	}
+	
+	// Check that the user's phone number is in a valid form
+	public static boolean validPhoneNum(String phoneNum) {
+		boolean validPhone = false;
+		String regexBasic = "^\\d{10}$";
+		String regexExtra = "^((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$";
+		if (phoneNum.matches(regexBasic) || phoneNum.matches(regexExtra)) {
+			validPhone = true;
+		}
+		
+		return validPhone;
+	}
+	
+	// Convert a given phone number string into a specific form of writing a phone number
+	public static String convertPhoneForm(String phoneNum) {
+		String convertedForm = "";
+		/* 3 main forms - Assuming input is in these forms
+		 * 
+		 * 1) No separation - 1234567890 - 10 length
+		 * 
+		 * 2) 3 groups of digits - 123 456 7890 - 12 length
+		 * 
+		 * 3) 3 groups, first has parentheses - (123) 456 7890 - 14 length
+		 * 
+		 * Desired result - 123-456-7890
+		 */
+		
+		if (phoneNum.length() == 10) {
+			convertedForm += phoneNum.substring(0, 3) + "-" + phoneNum.substring(3, 6) + "-" + phoneNum.substring(6, 10);
+		} else if (phoneNum.length() == 12) {
+			convertedForm += phoneNum.substring(0, 3) + "-" + phoneNum.substring(4, 7) + "-" + phoneNum.substring(8, 12);
+		} else if (phoneNum.length() == 14) {
+			convertedForm += phoneNum.substring(1, 4) + "-" + phoneNum.substring(6, 9) + "-" + phoneNum.substring(10, 14);
+		}
+		
+		return convertedForm;
 	}
 	
 	// Check that the customer's user and password are in the database
@@ -102,11 +136,9 @@ public class DollarsBankController {
 		boolean validLogin = false;
 		for (Customer cu: DataGeneratorStubUtil.customerList) {
 			if (user.equals(cu.getBankAccount().getUserId()) && pass.equals(cu.getBankAccount().getPassword())) {
-				System.out.println("Valid login");
 				validLogin = true;
 			}
 		}
-		
 		return validLogin;
 	}
 	
@@ -120,4 +152,27 @@ public class DollarsBankController {
 		return valid;
 	}
 
+	// Check that the string is a float
+	public static boolean isFloat(String input) {
+		boolean isFloat = true;
+		try {
+			Float.parseFloat(input);
+		} catch (NumberFormatException ex) {
+			isFloat = false;
+		}
+		
+		return isFloat;
+	}
+	
+	// Check that the string is an integer
+	public static boolean isInt(String input) {
+		boolean isInt = true;
+		try {
+			Integer.parseInt(input);
+		} catch (NumberFormatException ex) {
+			isInt = false;
+		}
+		
+		return isInt;
+	}
 }
